@@ -1,0 +1,11 @@
+ItemCode,Name,UnitPrice,Manufacturer,ManufactureDate,ExpiryDate,Discount
+001,Milk,2.5,DairyLand,2025-03-01,2025-06-01,10
+002,Bread,1.2,BakeHouse,2025-04-15,2025-05-15,0
+003,Apple,0.5,OrchardFarm,2025-04-01,2025-04-30,5
+004,Cheese,3.0,DairyLand,2025-02-20,2025-05-20,15
+005,Rice,1.0,GoldenGrain,2025-01-10,2026-01-10,7
+006,TomatoSauce,1.8,SpiceWorld,2024-12-10,2025-12-10,20
+007,Cereal,3.5,HealthHarvest,2025-03-05,2025-09-05,5
+008,Butter,2.7,CowFarm,2025-03-15,2025-06-15,12
+009,OrangeJuice,2.9,FruitPress,2025-04-01,2025-07-01,8
+010,Chocolate,1.5,SweetBite,2025-02-01,2025-12-01,25

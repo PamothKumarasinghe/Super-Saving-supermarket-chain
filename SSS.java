@@ -5,7 +5,7 @@ class ItemCodeNotFound extends Exception {
     }
 }
 
-public class POS {
+public class SSS {
     public static void main(String[] args) {
 
     }
