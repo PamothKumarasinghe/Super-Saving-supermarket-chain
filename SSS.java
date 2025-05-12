@@ -25,7 +25,7 @@ class GroceryItem {
         this.eDate = eDate;
     }
     public double getItemPrice(int itemQuantity) {
-        return itemPrice * itemQuantity;
+        return itemPrice * itemQuantity; //Didnt add the discount yet, plz be kind to add it
     }
     
 }
@@ -60,15 +60,33 @@ class POS {
             System.out.println(e.getMessage());
         }
     }
-    public void getItemDetails() {
+    public GroceryItem getItemDetails() {
+        GroceryItem item = null;
         System.out.println("Enter the item code:");
-        String itemCode = sc.nextLine();
-
-
+        
+        try {
+            String itemCode = sc.nextLine().trim();
+            if (!cart.containsKey(itemCode)) {
+                throw new ItemCodeNotFound("Item code not found");
+            }
+            item = cart.get(itemCode);
+        } catch (ItemCodeNotFound e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        
+        return item;
+    }
+    public void generateBill() {
+        GroceryItem item = null;
+        while ()
 
     }
     
 }
+
+
 public class SSS {
     public static void main(String[] args) {
 
