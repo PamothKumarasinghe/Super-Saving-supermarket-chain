@@ -31,7 +31,12 @@ class GroceryItem {
 }
 class POS {
     static final HashMap<String, GroceryItem> cart = new HashMap<>();
+    ArrayList<
     Scanner sc = new Scanner(System.in);
+    String cashierName;
+    String branch;
+    String customerName;
+
     
     static {
         try {
@@ -60,12 +65,12 @@ class POS {
             System.out.println(e.getMessage());
         }
     }
-    public GroceryItem getItemDetails() {
+    public GroceryItem getItemDetails(String itemCode) {
         GroceryItem item = null;
-        System.out.println("Enter the item code:");
+        // System.out.println("Enter the item code:");
         
         try {
-            String itemCode = sc.nextLine().trim();
+            // String itemCode = sc.nextLine().trim();
             if (!cart.containsKey(itemCode)) {
                 throw new ItemCodeNotFound("Item code not found");
             }
@@ -79,8 +84,45 @@ class POS {
         return item;
     }
     public void generateBill() {
+        System.out.print("Enter cashier name: ");
+        cashierName = sc.nextLine();
+        System.out.print("Enter branch name: ");
+        branch = sc.nextLine();
+        System.out.print("Enter customer name (or press Enter to skip): ");
+        customerName = sc.nextLine();
+        if (customerName.trim().isEmpty()) customerName = "Guest";
+
         GroceryItem item = null;
-        while (item == null)
+        // while (true) {
+        //     System.out.println(("Enter the item code (or 'exit' to finish):"));
+        //     String itemCode = sc.nextLine().trim();
+        //     if (itemCode.equalsIgnoreCase("exit")) break;
+        //     item = getItemDetails(itemCode);
+        //     if (item != null) {
+        //         System.out.println(("Enter the quantity: "));
+        //         int itemQuantity = sc.nextInt();
+        //         sc.nextLine();
+        //     }
+
+        // }
+
+        while (true) { 
+            System.out.println("\nPress 1 to Add item \nPress 2 to Print bill ");
+            int choice = Integer.parseInt(sc.nextLine().trim());
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Enter the item code:");
+                    String itemCode = sc.nextLine().trim();
+                    item = getItemDetails(itemCode);
+                    if (item != null) {
+                        System.out.println("Enter the quantity: ");
+                        int itemQuantity = Integer.parseInt(sc.nextLine().trim());
+                    }
+
+                case 2:
+            }
+        }
 
     }
     
