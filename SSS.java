@@ -106,7 +106,7 @@ class POS {
     public void generateBill() {
         System.out.print("Enter cashier name: ");
         cashierName = sc.nextLine();
-        System.out.print("Enter branch name: ");
+        System.out.print("Enter branch  name: ");
         branch = sc.nextLine();
         System.out.print("Enter customer name (or press Enter to skip): ");
         customerName = sc.nextLine();
@@ -119,7 +119,7 @@ class POS {
 
             switch (choice) {
                 case 1 -> {
-                    System.out.println("Enter the item code:");
+                    System.out.println("\nEnter the item code:");
                     String itemCode = sc.nextLine().trim();
                     item = getItemDetails(itemCode);
                     if (item != null) {
@@ -140,11 +140,11 @@ class POS {
 
     }
     public void printBill() {
-        System.out.println("----------------------------------------");
-        System.out.println("Cashier Name: " + cashierName);
-        System.out.println("Branch Name:" + branch);
+        System.out.println("-----------------------------------------------------------");
+        System.out.println("Cashier  Name: " + cashierName);
+        System.out.println("Branch   Name: " + branch);
         System.out.println("Customer Name: " + customerName);
-        System.out.println("----------------------------------------");
+        System.out.println("-----------------------------------------------------------");
 
         double total = 0, totalDiscount = 0;
         for (Map.Entry<GroceryItem, Integer> en : currentBill.entrySet()) {
@@ -158,15 +158,15 @@ class POS {
 
             System.out.printf("%-15s %-5d $%-7.2f $%-7.2f %-9d%% $%-10.2f\n", item.getItemName(), qty, item.getUnitPrice(), itemTotal, itemDiscount, itemNetPrice);
         }
-        System.out.println("----------------------------------------");
-        System.out.println("Total Discount : " + totalDiscount);
-        System.out.println("Total Price : " + total);
+        System.out.println("-----------------------------------------------------------");
+        System.out.println("Total Discount : $" + String.format("%.2f",totalDiscount));
+        System.out.println("Total Price    : $" + String.format("%.2f",total));
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         String formattedDate = now.format(dtf);
-        System.out.println("Printed on : " + formattedDate);
-        System.out.println("----------------------------------------");
+        System.out.println("Printed on     : " + formattedDate);
+        System.out.println("-----------------------------------------------------------");
     }
     
 }
@@ -176,10 +176,12 @@ public class SSS {
     public static void main(String[] args) {
         POS pos = new POS();
         System.out.println("Welcome to the Grocery Store!");
-        System.out.println("========================================");
+        System.out.println("===========================================================");
         pos.generateBill();
         System.out.println("Thank you for shopping with us!");
-        System.out.println("========================================");
+        System.out.println("===========================================================");
         pos.sc.close();
+
+        System.exit(0);
     }
 }
