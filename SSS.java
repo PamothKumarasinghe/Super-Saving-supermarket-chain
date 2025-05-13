@@ -80,7 +80,7 @@ class POS {
     }
     public void generateBill() {
         GroceryItem item = null;
-        while ()
+        while (item == null)
 
     }
     
