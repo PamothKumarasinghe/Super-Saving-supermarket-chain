@@ -1,6 +1,8 @@
-
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 
 class ItemCodeNotFound extends Exception {
     public ItemCodeNotFound() {}
@@ -9,13 +11,13 @@ class ItemCodeNotFound extends Exception {
     }
 }
 class GroceryItem {
-    private String itemCode;
-    private String itemName;
-    private double itemPrice;
-    private String manufacturer;
-    private String pDate;
-    private String eDate;
-    private int discount;
+    private final String itemCode;
+    private final String itemName;
+    private final double itemPrice;
+    private final String manufacturer;
+    private final String pDate;
+    private final String eDate;
+    private final int discount;
 
     public GroceryItem(String itemCode, String itemName, double itemPrice,String manufacturer, String pDate, String eDate, int discount) {
         this.itemCode = itemCode;
@@ -26,8 +28,22 @@ class GroceryItem {
         this.eDate = eDate;
         this.discount = discount;
     }
+    public String getItemName() {
+        return itemName;
+    }
+    public double getUnitPrice() {
+        return itemPrice;
+    }
+    public int getDiscount() {
+        return discount;
+    }
+    /* return the price before discount added to an ITEM */
     public double getItemPrice(int itemQuantity) {
         return itemPrice * itemQuantity; //Didnt add the discount yet, plz be kind to add it
+    }
+    /* returns the price after adding the discount for an ITEM */
+    public double getItemNetPrice(double total) {
+        return total - (total * discount / 100);
     }
     
 }
@@ -42,22 +58,23 @@ class POS {
     
     static {
         try {
-            File file = new File("grocery_item.txt");
-            FileReader fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
-            String line = br.readLine(); //read the first line in the file
+            File file = new File("grocery_items.txt");
+            try (BufferedReader br = new BufferedReader(new FileReader(file))) { // try-with-resources ensures br is closed
+                String line = br.readLine(); //read the first line in the file
                 
-            while (line != null) {
-                String[] arr = line.split(",");
-                String a = arr[0];
-                String b = arr[1];
-                double c = Double.parseDouble(arr[2]);
-                String d = arr[3];
-                String e = arr[4];
-                String f = arr[5];
+                while (line != null) {
+                    String[] arr = line.split(",");
+                    String a = arr[0];
+                    String b = arr[1];
+                    double c = Double.parseDouble(arr[2]);
+                    String d = arr[3];
+                    String e = arr[4];
+                    String f = arr[5];
+                    int g = Integer.parseInt(arr[6]);
 
-                cart.put(a, new GroceryItem(a, b, c, d, e, f));
-
+                    cart.put(a, new GroceryItem(a, b, c, d, e, f, g));
+                    line = br.readLine();
+                }
             }
         } 
         catch (FileNotFoundException e) {
@@ -66,6 +83,7 @@ class POS {
         catch (IOException | NumberFormatException e) {
             System.out.println(e.getMessage());
         }
+        
     }
     public GroceryItem getItemDetails(String itemCode) {
         GroceryItem item = null;
@@ -94,19 +112,7 @@ class POS {
         customerName = sc.nextLine();
         if (customerName.trim().isEmpty()) customerName = "Guest";
 
-        GroceryItem item = null;
-        // while (true) {
-        //     System.out.println(("Enter the item code (or 'exit' to finish):"));
-        //     String itemCode = sc.nextLine().trim();
-        //     if (itemCode.equalsIgnoreCase("exit")) break;
-        //     item = getItemDetails(itemCode);
-        //     if (item != null) {
-        //         System.out.println(("Enter the quantity: "));
-        //         int itemQuantity = sc.nextInt();
-        //         sc.nextLine();
-        //     }
-
-        // }
+        GroceryItem item;
         while (true) { 
             System.out.println("\nPress 1 to Add item \nPress 2 to Print bill ");
             int choice = Integer.parseInt(sc.nextLine().trim());
@@ -140,13 +146,27 @@ class POS {
         System.out.println("Customer Name: " + customerName);
         System.out.println("----------------------------------------");
 
-        double total = 0;
+        double total = 0, totalDiscount = 0;
         for (Map.Entry<GroceryItem, Integer> en : currentBill.entrySet()) {
             GroceryItem item = en.getKey();
             Integer qty = en.getValue();
-            total = item.getItemPrice(qty);
-            
+
+            double itemTotal = item.getItemPrice(qty);
+            double itemNetPrice = item.getItemNetPrice(itemTotal);
+            int itemDiscount = item.getDiscount();
+            total += itemNetPrice; totalDiscount += itemDiscount;
+
+            System.out.printf("%-15s %-5d $%-7.2f $%-7.2f %-9d%% $%-10.2f\n", item.getItemName(), qty, item.getUnitPrice(), itemTotal, itemDiscount, itemNetPrice);
         }
+        System.out.println("----------------------------------------");
+        System.out.println("Total Discount : " + totalDiscount);
+        System.out.println("Total Price : " + total);
+
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        String formattedDate = now.format(dtf);
+        System.out.println("Printed on : " + formattedDate);
+        System.out.println("----------------------------------------");
     }
     
 }
@@ -154,6 +174,12 @@ class POS {
 
 public class SSS {
     public static void main(String[] args) {
-
+        POS pos = new POS();
+        System.out.println("Welcome to the Grocery Store!");
+        System.out.println("========================================");
+        pos.generateBill();
+        System.out.println("Thank you for shopping with us!");
+        System.out.println("========================================");
+        pos.sc.close();
     }
 }

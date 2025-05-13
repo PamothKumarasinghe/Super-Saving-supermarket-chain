@@ -1,4 +1,3 @@
-ItemCode,Name,UnitPrice,Manufacturer,ManufactureDate,ExpiryDate,Discount
 001,Milk,2.5,DairyLand,2025-03-01,2025-06-01,10
 002,Bread,1.2,BakeHouse,2025-04-15,2025-05-15,0
 003,Apple,0.5,OrchardFarm,2025-04-01,2025-04-30,5
