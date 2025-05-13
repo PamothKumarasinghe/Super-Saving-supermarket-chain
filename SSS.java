@@ -74,8 +74,8 @@ class POS {
 
                     cart.put(a, new GroceryItem(a, b, c, d, e, f, g));
                     line = br.readLine();
-
-                    System.out.println("Item code: " + a + ", Item name: " + b + ", Item price: " + c + ", Manufacturer: " + d + ", Production date: " + e + ", Expiry date: " + f + ", Discount: " + g);
+                    
+                    System.out.printf("%-10s %-15s $%-8.2f %-15s %-12s %-12s %-5d%%\n", a, b, c, d, e, f, g);
                 }
             }
         } 
@@ -177,10 +177,10 @@ class POS {
 public class SSS {
     public static void main(String[] args) {
         POS pos = new POS();
-        System.out.println("Welcome to the Grocery Store!");
+        System.out.println("\nWelcome to the Grocery Store!");
         System.out.println("===========================================================");
         pos.generateBill();
-        System.out.println("Thank you for shopping with us!");
+        System.out.println("\nThank you for shopping with us!");
         System.out.println("===========================================================");
         pos.sc.close();
 
