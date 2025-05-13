@@ -74,6 +74,8 @@ class POS {
 
                     cart.put(a, new GroceryItem(a, b, c, d, e, f, g));
                     line = br.readLine();
+
+                    System.out.println("Item code: " + a + ", Item name: " + b + ", Item price: " + c + ", Manufacturer: " + d + ", Production date: " + e + ", Expiry date: " + f + ", Discount: " + g);
                 }
             }
         } 
