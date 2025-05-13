@@ -15,14 +15,16 @@ class GroceryItem {
     private String manufacturer;
     private String pDate;
     private String eDate;
+    private int discount;
 
-    public GroceryItem(String itemCode, String itemName, double itemPrice,String manufacturer, String pDate, String eDate) {
+    public GroceryItem(String itemCode, String itemName, double itemPrice,String manufacturer, String pDate, String eDate, int discount) {
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.manufacturer = manufacturer;
         this.pDate = pDate;
         this.eDate = eDate;
+        this.discount = discount;
     }
     public double getItemPrice(int itemQuantity) {
         return itemPrice * itemQuantity; //Didnt add the discount yet, plz be kind to add it
@@ -31,7 +33,7 @@ class GroceryItem {
 }
 class POS {
     static final HashMap<String, GroceryItem> cart = new HashMap<>();
-    ArrayList<
+    HashMap<GroceryItem, Integer> currentBill = new HashMap<>();
     Scanner sc = new Scanner(System.in);
     String cashierName;
     String branch;
@@ -105,25 +107,46 @@ class POS {
         //     }
 
         // }
-
         while (true) { 
             System.out.println("\nPress 1 to Add item \nPress 2 to Print bill ");
             int choice = Integer.parseInt(sc.nextLine().trim());
 
             switch (choice) {
-                case 1:
+                case 1 -> {
                     System.out.println("Enter the item code:");
                     String itemCode = sc.nextLine().trim();
                     item = getItemDetails(itemCode);
                     if (item != null) {
                         System.out.println("Enter the quantity: ");
                         int itemQuantity = Integer.parseInt(sc.nextLine().trim());
-                    }
+                        currentBill.put(item, itemQuantity);
+                        System.out.println("Item added to the bill.");
+                    } 
+                }
+                case 2 -> {
+                    printBill();
+                    return;
+                }
+                default -> System.out.println("Invalid choice. Please try again.");
 
-                case 2:
             }
         }
 
+    }
+    public void printBill() {
+        System.out.println("----------------------------------------");
+        System.out.println("Cashier Name: " + cashierName);
+        System.out.println("Branch Name:" + branch);
+        System.out.println("Customer Name: " + customerName);
+        System.out.println("----------------------------------------");
+
+        double total = 0;
+        for (Map.Entry<GroceryItem, Integer> en : currentBill.entrySet()) {
+            GroceryItem item = en.getKey();
+            Integer qty = en.getValue();
+            total = item.getItemPrice(qty);
+            
+        }
     }
     
 }
