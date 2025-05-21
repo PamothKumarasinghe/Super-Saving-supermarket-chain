@@ -3,6 +3,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+// Both the classes GoceryItem and POS are Serializable-because i am going to add the pending bill feature
+// So i need to save the currentBill in a file, which is a HashMap that initializes in the POS class and contains GroceryItems and integers - so both classes are ser.
+
 
 class ItemCodeNotFound extends Exception {
     public ItemCodeNotFound() {}
@@ -10,7 +13,7 @@ class ItemCodeNotFound extends Exception {
         super(message);
     }
 }
-class GroceryItem {
+class GroceryItem implements Serializable {
     private final String itemCode;
     private final String itemName;
     private final double itemPrice;
@@ -47,7 +50,7 @@ class GroceryItem {
     }
     
 }
-class POS {
+class POS implements Serializable{
     static final HashMap<String, GroceryItem> cart = new HashMap<>();
     HashMap<GroceryItem, Integer> currentBill = new HashMap<>();
     Scanner sc = new Scanner(System.in);
@@ -116,7 +119,7 @@ class POS {
 
         GroceryItem item;
         while (true) { 
-            System.out.println("\nPress 1 to Add item \nPress 2 to Print bill ");
+            System.out.println("\nPress 1 to Add item \nPress 2 to Print bill \nPress 3 to Save pending bill \nPress 4 to Load the pending bill \nPress 5 to exit \n");
             int choice = Integer.parseInt(sc.nextLine().trim());
 
             switch (choice) {
@@ -135,9 +138,54 @@ class POS {
                     printBill();
                     return;
                 }
+                case 3 -> {
+                    savePendingBill();
+                }
+                case 4 -> {
+                    loadPendingBill();
+                }
+                case 5 -> {
+                    System.out.println("Exiting....");
+                    System.exit(0);
+                }
                 default -> System.out.println("Invalid choice. Please try again.");
 
             }
+        }
+
+    }
+    public void savePendingBill() {
+        String fileName = customerName+"_bill.ser";
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+            oos.writeObject(currentBill);
+            oos.close();
+            System.out.println("Pending bill successfully saved!");
+
+        }
+        catch (IOException e) {
+            System.out.println("Error saving pending Bill: " + e.getMessage());
+        }
+    }
+    public void loadPendingBill() {
+        System.out.println("Enter the customer name to Load the pending bill of his/ her : ");
+        String fileName = sc.nextLine().trim() + "_bill.ser";
+        File file = new File(fileName);
+        if (!file.exists()) {
+            System.out.println("No such pending bill found for this customer, please check the name and try again.");
+            return;
+        }
+        System.out.println("Loading pending bill for customer: " + fileName);
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+            currentBill = (HashMap<GroceryItem, Integer>) ois.readObject(); //this ois.readObject() wil return an object,
+                                                                            //so i need to cast it to HashMap<GroceryItem, Integer> 
+                                                                            //hence used type casting
+            System.out.println("Pending bill successfully loaded!");                           
+            ois.close();
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading pending Bill: " + e.getMessage());
         }
 
     }
