@@ -31,8 +31,20 @@ class GroceryItem implements Serializable {
         this.eDate = eDate;
         this.discount = discount;
     }
+    public String getItemCode() {
+        return itemCode;
+    }
     public String getItemName() {
         return itemName;
+    }
+    public String getManufacturer() {
+        return manufacturer;
+    }
+    public String getProductionDate() {
+        return pDate;
+    }
+    public String getExpirationDate() {
+        return eDate;
     }
     public double getUnitPrice() {
         return itemPrice;
@@ -97,7 +109,7 @@ class POS implements Serializable{
         try {
             // String itemCode = sc.nextLine().trim();
             if (!cart.containsKey(itemCode)) {
-                throw new ItemCodeNotFound("Item code not found");
+                throw new ItemCodeNotFound("erororororororor");  ///sdjck
             }
             item = cart.get(itemCode);
         } catch (ItemCodeNotFound e) {
@@ -156,10 +168,8 @@ class POS implements Serializable{
     }
     public void savePendingBill() {
         String fileName = customerName+"_bill.ser";
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
             oos.writeObject(currentBill);
-            oos.close();
             System.out.println("Pending bill successfully saved!");
 
         }
@@ -167,6 +177,7 @@ class POS implements Serializable{
             System.out.println("Error saving pending Bill: " + e.getMessage());
         }
     }
+    @SuppressWarnings("unchecked")
     public void loadPendingBill() {
         System.out.println("Enter the customer name to Load the pending bill of his/ her : ");
         String fileName = sc.nextLine().trim() + "_bill.ser";
@@ -176,13 +187,11 @@ class POS implements Serializable{
             return;
         }
         System.out.println("Loading pending bill for customer: " + fileName);
-        try {
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
             currentBill = (HashMap<GroceryItem, Integer>) ois.readObject(); //this ois.readObject() wil return an object,
                                                                             //so i need to cast it to HashMap<GroceryItem, Integer> 
                                                                             //hence used type casting
-            System.out.println("Pending bill successfully loaded!");                           
-            ois.close();
+            System.out.println("Pending bill successfully loaded!");
 
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error loading pending Bill: " + e.getMessage());
